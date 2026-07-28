@@ -121,17 +121,17 @@
         margin-bottom: 16px;
       }
       .envelope {
-        width: 120px;
-        height: 84px;
+        width: 190px;
+        height: 132px;
         position: relative;
-        margin: 10px auto 26px;
+        margin: 14px auto 30px;
       }
       .env-body {
         position: absolute;
         inset: 0;
         background: linear-gradient(180deg, #3a2028, #241419);
         border: 1px solid var(--line);
-        border-radius: 4px;
+        border-radius: 6px;
       }
       .env-flap {
         position: absolute;
@@ -148,8 +148,8 @@
         top: 60%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 26px;
-        height: 26px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         background: radial-gradient(
           circle at 35% 30%,
@@ -159,8 +159,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: 18px;
         color: #2a141a;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       }
       .intro-title {
         font-family: "Playfair Display", serif;
@@ -203,6 +204,17 @@
       .distance-map svg {
         width: 100%;
         height: 100%;
+      }
+      .landmass {
+        fill: rgba(230, 200, 138, 0.1);
+        stroke: rgba(230, 200, 138, 0.22);
+        stroke-width: 1;
+      }
+      .sea-label {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+        fill: rgba(203, 184, 174, 0.35);
+        text-transform: uppercase;
       }
       .map-path-glow {
         fill: none;
@@ -636,6 +648,30 @@
         <div class="eyebrow">Indonesia — Taiwan</div>
         <div class="distance-map">
           <svg viewBox="0 0 340 130">
+            <!-- siluet daratan (dekoratif, bukan peta presisi) -->
+            <g class="landmass">
+              <!-- gugusan Indonesia: Sumatra, Jawa, Kalimantan, Sulawesi -->
+              <path
+                d="M 8 92 Q 24 78 44 86 Q 58 93 50 106 Q 36 117 20 111 Q 6 103 8 92 Z"
+              ></path>
+              <path
+                d="M 42 112 Q 68 107 96 114 Q 102 118 91 122 Q 64 126 45 120 Q 38 117 42 112 Z"
+              ></path>
+              <path
+                d="M 68 72 Q 94 61 116 75 Q 127 88 111 99 Q 89 108 72 94 Q 61 83 68 72 Z"
+              ></path>
+              <path
+                d="M 118 92 Q 132 82 144 90 Q 150 100 140 110 Q 128 116 120 105 Q 114 98 118 92 Z"
+              ></path>
+              <!-- gugusan Filipina, penghubung visual di tengah rute -->
+              <circle cx="180" cy="66" r="4"></circle>
+              <circle cx="190" cy="78" r="3"></circle>
+              <circle cx="172" cy="82" r="2.5"></circle>
+              <!-- Taiwan -->
+              <path
+                d="M 266 28 Q 278 19 289 28 Q 296 44 286 59 Q 276 64 267 52 Q 259 39 266 28 Z"
+              ></path>
+            </g>
             <path class="map-path" d="M 60 100 C 140 20, 220 20, 280 45"></path>
             <path
               class="map-path-glow"
