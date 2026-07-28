@@ -606,6 +606,26 @@
       }
 
       /* SLIDE 8 : closing */
+      #closingSlide {
+        background-size: cover;
+        background-position: center;
+      }
+      #closingSlide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(22, 13, 18, 0.55) 0%,
+          rgba(22, 13, 18, 0.75) 55%,
+          rgba(22, 13, 18, 0.92) 100%
+        );
+        z-index: 0;
+      }
+      #closingSlide > * {
+        position: relative;
+        z-index: 1;
+      }
       .closing-big {
         font-family: "Playfair Display", serif;
         font-style: italic;
@@ -697,9 +717,7 @@
 
       <!-- SLIDE 2 : typewriter -->
       <div class="slide" data-slide="2">
-        <div class="greet-eyebrow" id="greetEyebrow">
-          Untuk Angger Gusti Puji Nugrahaeni
-        </div>
+        <div class="greet-eyebrow" id="greetEyebrow">Untuk Sayangku</div>
         <div class="type-line" id="typeLine"></div>
         <div class="greet-divider" id="greetDivider"></div>
         <div class="tap-hint">ketuk untuk lanjut</div>
@@ -959,7 +977,7 @@
       </div>
 
       <!-- SLIDE 7 : closing -->
-      <div class="slide" data-slide="7">
+      <div class="slide" data-slide="7" id="closingSlide">
         <div class="closing-big">
           Selamat merayakan usia baru,<br />di negeri orang.<br />Aku menunggu
           di ujung rindu ini. <span class="heart">♥</span>
@@ -1039,6 +1057,15 @@
       updateDots();
 
       app.addEventListener("click", (e) => {
+        if (!musicStarted) {
+          musicStarted = true;
+          audio
+            .play()
+            .then(() => {
+              musicBtn.textContent = "❚❚";
+            })
+            .catch(() => {});
+        }
         if (
           e.target.closest("#musicToggle") ||
           e.target.closest("#replayBtn") ||
@@ -1066,7 +1093,7 @@
         typed = true;
         const el = document.getElementById("typeLine");
         const divider = document.getElementById("greetDivider");
-        const text = `Hai, ${RECIPIENT_NAME}.\nSelamat ulang tahun,\n2 Agustus 2026 ini spesial untukmu.`;
+        const text = `Hai, ${RECIPIENT_NAME}.\nSelamat ulang tahun,\n2 Agustus ini spesial untukmu.`;
         let i = 0;
         el.innerHTML = '<span class="cursor"></span>';
         function step() {
@@ -1153,6 +1180,41 @@
       }
       renderHeart();
       window.addEventListener("resize", renderHeart);
+
+      // background foto slide penutup
+      (function loadClosingBg() {
+        const exts = [
+          "jpg",
+          "JPG",
+          "jpeg",
+          "JPEG",
+          "png",
+          "PNG",
+          "webp",
+          "WEBP",
+          "gif",
+          "GIF",
+          "jfif",
+          "JFIF",
+          "avif",
+          "AVIF",
+        ];
+        const el = document.getElementById("closingSlide");
+        let attempt = 0;
+        function tryNext() {
+          if (attempt >= exts.length) return;
+          const testImg = new Image();
+          testImg.onload = () => {
+            el.style.backgroundImage = `url("images/pasangan.${exts[attempt]}")`;
+          };
+          testImg.onerror = () => {
+            attempt++;
+            tryNext();
+          };
+          testImg.src = `images/pasangan.${exts[attempt]}`;
+        }
+        tryNext();
+      })();
 
       // cake blow
       let flameBlown = false;
@@ -1242,6 +1304,7 @@
       // musik
       const audio = document.getElementById("audioPlayer");
       const musicBtn = document.getElementById("musicToggle");
+      let musicStarted = false;
       musicBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         if (audio.paused) {
