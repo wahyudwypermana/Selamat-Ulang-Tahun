@@ -679,9 +679,7 @@
         <div class="eyebrow">Indonesia — Taiwan</div>
         <div class="distance-map">
           <svg viewBox="0 0 340 130">
-            <!-- siluet daratan (dekoratif, bukan peta presisi) -->
             <g class="landmass">
-              <!-- gugusan Indonesia: Sumatra, Jawa, Kalimantan, Sulawesi -->
               <path
                 d="M 8 92 Q 24 78 44 86 Q 58 93 50 106 Q 36 117 20 111 Q 6 103 8 92 Z"
               ></path>
@@ -694,11 +692,9 @@
               <path
                 d="M 118 92 Q 132 82 144 90 Q 150 100 140 110 Q 128 116 120 105 Q 114 98 118 92 Z"
               ></path>
-              <!-- gugusan Filipina, penghubung visual di tengah rute -->
               <circle cx="180" cy="66" r="4"></circle>
               <circle cx="190" cy="78" r="3"></circle>
               <circle cx="172" cy="82" r="2.5"></circle>
-              <!-- Taiwan -->
               <path
                 d="M 266 28 Q 278 19 289 28 Q 296 44 286 59 Q 276 64 267 52 Q 259 39 266 28 Z"
               ></path>
@@ -744,7 +740,8 @@
         <div class="polaroid-stack" id="polaroidStack"></div>
         <div class="gallery-note">
           Taruh foto di folder <code>images/</code>, beri nama
-          <code>foto1.jpg</code> sampai <code>foto5.jpg</code>.
+          <code>foto1</code> sampai <code>foto5</code> (ekstensi jpg/JPG/png
+          bebas).
         </div>
         <div class="tap-hint">ketuk untuk ganti foto / lanjut</div>
       </div>
@@ -754,9 +751,9 @@
         <div class="eyebrow">Kamu, Dalam Satu Bentuk Hati</div>
         <div class="heart-wrap" id="heartWrap"></div>
         <div class="gallery-note">
-          Pakai foto <code>images/foto1.jpg</code> sampai
-          <code>images/foto12.jpg</code> — susunannya sudah otomatis membentuk
-          siluet hati.
+          Pakai foto <code>images/foto1</code> sampai
+          <code>images/foto12</code> (ekstensi jpg/JPG/png bebas) — susunannya
+          sudah otomatis membentuk siluet hati.
         </div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
@@ -819,6 +816,23 @@
       const slides = Array.from(document.querySelectorAll(".slide"));
       let current = 0;
 
+      // coba beberapa ekstensi (jpg/JPG/jpeg/png dst) supaya tidak masalah huruf besar-kecil
+      function imgWithFallback(basePath, fallbackHtml) {
+        const exts = ["jpg", "JPG", "jpeg", "JPEG", "png", "PNG"];
+        let attempt = 0;
+        function tryNext(imgEl) {
+          attempt++;
+          if (attempt >= exts.length) {
+            imgEl.style.display = "none";
+            imgEl.nextElementSibling.style.display = "flex";
+            return;
+          }
+          imgEl.src = `${basePath}.${exts[attempt]}`;
+        }
+        window.__imgFallbackTryNext = window.__imgFallbackTryNext || tryNext;
+        return `<img src="${basePath}.${exts[0]}" onerror="window.__imgFallbackTryNext(this)">${fallbackHtml}`;
+      }
+
       // bintang
       const starsWrap = document.getElementById("stars");
       for (let i = 0; i < 40; i++) {
@@ -859,8 +873,8 @@
           e.target.closest("#flame")
         )
           return;
-        if (current === slides.length - 1) return; // slide terakhir tidak lanjut otomatis
-        if (current === 6 && !flameBlown) return; // slide kue: harus tiup dulu
+        if (current === slides.length - 1) return;
+        if (current === 6 && !flameBlown) return;
         goTo(current + 1);
       });
 
@@ -873,7 +887,6 @@
       });
 
       // typewriter
-      // ganti nama panggilan di sini, dan di variabel RECIPIENT_NAME saja
       const RECIPIENT_NAME = "Sayangku";
       let typed = false;
       function typeGreeting() {
@@ -914,8 +927,7 @@
         const rot = photoIndex % 2 === 0 ? "-4deg" : "4deg";
         card.style.transform = `rotate(${rot})`;
         card.innerHTML = `
-        <div class="ph"><img src="images/foto${photoIndex + 1}.jpg" onerror="this.style.display='none'; this.parentElement.querySelector('.ph-label').style.display='block';">
-        <div class="ph-label" style="display:none;">foto${photoIndex + 1}.jpg</div></div>
+        <div class="ph">${imgWithFallback(`images/foto${photoIndex + 1}`, `<div class="ph-label" style="display:none;">foto${photoIndex + 1}.*</div>`)}</div>
         <div class="cap">${captions[photoIndex % captions.length]}</div>`;
         stack.appendChild(card);
       }
@@ -928,19 +940,17 @@
           renderPolaroid();
         });
 
-      // heart photo collage - 12 titik ditata manual mengelilingi garis luar
-      // siluet hati (bukan sampel sudut sama rata) supaya dua lengkung atas
-      // dan lekukan tengah tetap jelas dan kartu foto tidak saling tabrakan.
+      // heart photo collage
       const heartWrap = document.getElementById("heartWrap");
       const HEART_POINTS = [
-        { x: 0.5, y: 0.94, r: 0 }, // ujung bawah
+        { x: 0.5, y: 0.94, r: 0 },
         { x: 0.315, y: 0.8, r: -10 },
         { x: 0.155, y: 0.615, r: -18 },
         { x: 0.075, y: 0.415, r: -14 },
         { x: 0.135, y: 0.225, r: -8 },
-        { x: 0.3, y: 0.1, r: 6 }, // puncak lengkung kiri
-        { x: 0.5, y: 0.225, r: 0 }, // lekukan tengah atas
-        { x: 0.7, y: 0.1, r: -6 }, // puncak lengkung kanan
+        { x: 0.3, y: 0.1, r: 6 },
+        { x: 0.5, y: 0.225, r: 0 },
+        { x: 0.7, y: 0.1, r: -6 },
         { x: 0.865, y: 0.225, r: 8 },
         { x: 0.925, y: 0.415, r: 14 },
         { x: 0.845, y: 0.615, r: 18 },
@@ -962,8 +972,10 @@
           card.style.zIndex = 10 + i;
           card.style.transform = `rotate(${pt.r}deg)`;
           card.style.animationDelay = i * 0.07 + "s";
-          card.innerHTML = `<img src="images/foto${i + 1}.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="hc-fallback" style="display:none;">foto${i + 1}.jpg</div>`;
+          card.innerHTML = imgWithFallback(
+            `images/foto${i + 1}`,
+            `<div class="hc-fallback" style="display:none;">foto${i + 1}.*</div>`,
+          );
           heartWrap.appendChild(card);
         });
       }
