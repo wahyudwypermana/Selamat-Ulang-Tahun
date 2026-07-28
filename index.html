@@ -172,6 +172,18 @@
       }
 
       /* SLIDE 2 : typewriter greeting */
+      .greet-eyebrow {
+        font-size: 11px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--rose);
+        margin-bottom: 18px;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+      .slide.active .greet-eyebrow {
+        opacity: 1;
+      }
       .type-line {
         font-family: "Playfair Display", serif;
         font-style: italic;
@@ -194,48 +206,20 @@
           opacity: 0;
         }
       }
-      .type-sub {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
+      .greet-divider {
+        width: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold-soft),
+          transparent
+        );
         margin-top: 22px;
-        opacity: 0;
-        transform: translateY(6px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
+        transition: width 1.2s ease 0.3s;
       }
-      .type-sub.show {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .type-sub .date-badge {
-        font-size: 11px;
-        letter-spacing: 2px;
-        color: var(--bg-deep);
-        background: var(--gold-soft);
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-family: "Poppins";
-        text-transform: uppercase;
-      }
-      .type-sub .mini-heart {
-        font-size: 14px;
-        color: var(--rose);
-        animation: heartbeat 1.6s infinite ease-in-out;
-      }
-      @keyframes heartbeat {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        25% {
-          transform: scale(1.25);
-        }
-        40% {
-          transform: scale(1);
-        }
+      .greet-divider.show {
+        width: 140px;
       }
 
       /* SLIDE 3 : distance map (signature) */
@@ -684,12 +668,9 @@
 
       <!-- SLIDE 2 : typewriter -->
       <div class="slide" data-slide="2">
+        <div class="greet-eyebrow" id="greetEyebrow">Untuk Sayangku</div>
         <div class="type-line" id="typeLine"></div>
-        <div class="type-sub" id="typeSub">
-          <span class="mini-heart">♥</span>
-          <span class="date-badge">02 Agustus</span>
-          <span class="mini-heart">♥</span>
-        </div>
+        <div class="greet-divider" id="greetDivider"></div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
 
@@ -891,14 +872,15 @@
       });
 
       // typewriter
+      // ganti nama panggilan di sini, dan di variabel RECIPIENT_NAME saja
+      const RECIPIENT_NAME = "Sayangku";
       let typed = false;
       function typeGreeting() {
         if (typed) return;
         typed = true;
         const el = document.getElementById("typeLine");
-        const sub = document.getElementById("typeSub");
-        const text =
-          "Hai, sayangku.\nSelamat ulang tahun,\n2 Agustus ini spesial untukmu.";
+        const divider = document.getElementById("greetDivider");
+        const text = `Hai, ${RECIPIENT_NAME}.\nSelamat ulang tahun,\n2 Agustus ini spesial untukmu.`;
         let i = 0;
         el.innerHTML = '<span class="cursor"></span>';
         function step() {
@@ -908,7 +890,7 @@
             i++;
             setTimeout(step, 45);
           } else {
-            sub.classList.add("show");
+            divider.classList.add("show");
           }
         }
         step();
