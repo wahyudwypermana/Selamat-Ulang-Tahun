@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Untuk Kamu, di Taiwan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap');
+
+  :root{
+    --bg-deep:#160d12; --bg-panel:#221319;
+    --gold:#cda05e; --gold-soft:#e6c78a;
+    --rose:#e6a8bb; --rose-deep:#a8455f;
+    --cream:#f6ece1; --cream-dim:#cbb8ae;
+    --line: rgba(205,160,94,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg-deep);}
+  body{font-family:'Poppins',sans-serif;font-weight:300;color:var(--cream);}
+
+  #app{
+    position:relative; width:100%; height:100vh; height:100dvh;
+    max-width:480px; margin:0 auto;
+    background: radial-gradient(ellipse at top, #2a161d 0%, var(--bg-deep) 60%, #0d0709 100%);
+    overflow:hidden;
+  }
+
+  .stars span{
+    position:absolute; width:2px; height:2px; background:var(--gold-soft);
+    border-radius:50%; opacity:.5; animation: twinkle 4s infinite ease-in-out;
+  }
+  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:.8;}}
+
+  .slide{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding: 40px 30px;
+    opacity:0; pointer-events:none;
+    transition: opacity .8s ease;
+  }
+  .slide.active{ opacity:1; pointer-events:auto; }
+
+  .tap-hint{
+    position:absolute; bottom:34px; left:0; right:0; text-align:center;
+    font-size:12px; letter-spacing:2px; color:var(--cream-dim);
+    animation: pulse 2s infinite ease-in-out;
+  }
+  @keyframes pulse{0%,100%{opacity:.4;}50%{opacity:1;}}
+
+  /* SLIDE 1 : intro */
+  .eyebrow{ font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--rose); margin-bottom:16px; }
+  .envelope{ width:120px;height:84px;position:relative;margin:10px auto 26px; }
+  .env-body{ position:absolute;inset:0;background:linear-gradient(180deg,#3a2028,#241419);border:1px solid var(--line);border-radius:4px; }
+  .env-flap{ position:absolute;top:0;left:0;width:100%;height:100%;clip-path:polygon(0 0,50% 55%,100% 0);background:linear-gradient(160deg,#4a2530,#2c161c);border-bottom:1px solid var(--line); }
+  .env-seal{ position:absolute;top:60%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold-soft),var(--rose-deep));display:flex;align-items:center;justify-content:center;font-size:13px;color:#2a141a; }
+  .intro-title{ font-family:'Playfair Display',serif; font-style:italic; font-size:22px; color:var(--gold-soft); line-height:1.5; }
+
+  /* SLIDE 2 : typewriter greeting */
+  .type-line{
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size: clamp(22px,7vw,30px); color:var(--gold-soft); line-height:1.5; min-height: 4.5em;
+  }
+  .cursor{ display:inline-block; width:2px; background:var(--gold-soft); margin-left:2px; animation: blink 0.8s infinite; }
+  @keyframes blink{ 50%{opacity:0;} }
+
+  /* SLIDE 3 : distance map (signature) */
+  .distance-map{ width:100%; max-width:340px; height:130px; }
+  .distance-map svg{ width:100%; height:100%; }
+  .map-path-glow{ fill:none; stroke:var(--rose); stroke-width:2; stroke-dasharray:340; stroke-dashoffset:340; filter: drop-shadow(0 0 4px var(--rose)); }
+  .slide.active .map-path-glow{ animation: draw 3s ease forwards .3s; }
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  .map-path{ fill:none; stroke:var(--line); stroke-width:1.5; stroke-dasharray:6 7; }
+  .pin circle.dot{ fill:var(--gold-soft); }
+  .pin circle.ring{ fill:none; stroke:var(--gold-soft); stroke-width:1.5; opacity:.6; animation: ring 2.4s infinite ease-out; transform-origin:center; }
+  @keyframes ring{0%{transform:scale(.4);opacity:.7;}100%{transform:scale(2.2);opacity:0;}}
+  .pin text{ font-size:10px; letter-spacing:1px; fill:var(--cream-dim); }
+  .plane{ font-size:14px; offset-rotate:0deg; }
+  .slide.active .plane{ animation: fly 3s ease forwards .3s; }
+  @keyframes fly{0%{offset-distance:0%;opacity:0;}8%{opacity:1;}100%{offset-distance:100%;}}
+  .distance-label{ font-size:12px; color:var(--cream-dim); margin-top:14px; letter-spacing:.5px; }
+  .distance-label strong{ color:var(--rose); font-weight:500; }
+
+  /* SLIDE 4 : polaroid gallery */
+  .polaroid-stack{ position:relative; width:220px; height:260px; margin-bottom: 22px; }
+  .polaroid{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    background:#f6ece1; border-radius:3px; padding:10px 10px 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    transition: transform .6s ease, opacity .6s ease;
+  }
+  .polaroid .ph{
+    width:100%; height:100%; border-radius:2px; overflow:hidden;
+    background: linear-gradient(160deg,#e4d3c3,#cbb8ae);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .polaroid .ph img{ width:100%;height:100%;object-fit:cover; }
+  .polaroid .ph .ph-label{ font-size:10px; color:#8a7264; letter-spacing:.5px; }
+  .polaroid .cap{ position:absolute; bottom:10px; left:0; right:0; text-align:center; font-family:'Dancing Script'; font-size:16px; color:#3a2028; }
+  .gallery-note{ font-size:11px; color:var(--cream-dim); margin-top:6px; line-height:1.7; max-width:260px; }
+  .gallery-note code{ background:rgba(230,200,138,0.12); padding:1px 5px; border-radius:3px; color:var(--gold-soft); }
+
+  /* SLIDE 4b : heart photo collage */
+  .heart-wrap{ position:relative; width:300px; height:285px; margin: 6px auto 10px; }
+  .heart-card{
+    position:absolute; width:52px; height:66px; border-radius:4px;
+    background:#f6ece1; padding:3px; border:1px solid rgba(255,255,255,.6);
+    box-shadow: 0 0 10px rgba(230,168,187,0.55), 0 4px 10px rgba(0,0,0,.4);
+    overflow:hidden; opacity:0; transition:none;
+  }
+  .heart-card img{ width:100%;height:100%;object-fit:cover;border-radius:2px; display:block; }
+  .heart-card .hc-fallback{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    font-size:9px; color:#8a7264; text-align:center; padding:2px;
+  }
+  .slide.active .heart-card{ animation: heartIn .6s ease forwards; }
+  @keyframes heartIn{ from{opacity:0; transform:scale(.5) translateY(10px);} to{opacity:1; transform:scale(1) translateY(0);} }
+  .heart-center-icon{
+    position:absolute; font-size:20px; color:var(--rose); opacity:0;
+  }
+  .slide.active .heart-center-icon{ animation: heartIn .6s ease forwards .5s; opacity:0; animation-fill-mode:forwards; }
+
+  /* SLIDE 5/6 : letter */
+  .letter-box{ max-height: 60vh; overflow-y:auto; padding-right:6px; }
+  .letter-box p{ font-family:'Playfair Display', serif; font-size:15px; line-height:1.85; color:var(--cream); margin:0 0 16px; text-align:left; }
+  .signature{ font-family:'Dancing Script'; font-size:22px; color:var(--gold-soft); text-align:right; }
+
+  /* SLIDE 7 : cake / candle */
+  .cake-wrap{ position:relative; width:200px; margin-bottom: 10px; }
+  .cake-title{ font-family:'Playfair Display', serif; font-style:italic; font-size:20px; color:var(--gold-soft); margin-bottom:18px; }
+  .flame{
+    width:8px; height:16px; background:linear-gradient(180deg,#ffd98a,#e8823a);
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    margin: 0 auto; transform-origin:bottom center;
+    animation: flicker 1.4s infinite ease-in-out;
+    filter: drop-shadow(0 0 6px #ffb84d);
+  }
+  @keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);}50%{transform:scale(1.08) rotate(2deg);}}
+  .flame.blown{ animation:none; opacity:0; transition: opacity .4s ease; }
+  .candle{ width:6px; height:34px; background:linear-gradient(180deg,#f6ece1,#cbb8ae); margin:0 auto; border-radius:2px; }
+  .cake-body{
+    width:180px; height:90px; margin:6px auto 0;
+    background: linear-gradient(180deg,#a8455f,#7a2c3f);
+    border-radius: 14px 14px 6px 6px;
+    position:relative;
+    box-shadow: 0 10px 24px rgba(0,0,0,.4);
+  }
+  .cake-body::before{
+    content:''; position:absolute; top:-10px; left:0; right:0; height:20px;
+    background: repeating-linear-gradient(90deg, #e6c78a 0 14px, #f6ece1 14px 28px);
+    border-radius: 10px;
+  }
+  .blow-hint{ font-size:12px; color:var(--cream-dim); margin-top:22px; letter-spacing:1px; }
+  .confetti-layer{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .confetti-piece{
+    position:absolute; top:-10px; width:8px; height:14px; opacity:0;
+  }
+
+  /* SLIDE 8 : closing */
+  .closing-big{ font-family:'Playfair Display', serif; font-style:italic; font-size:22px; color:var(--gold-soft); line-height:1.6; margin-bottom:20px; }
+  .heart{ font-size:20px; color:var(--rose); }
+  .replay-btn{
+    margin-top:20px; padding:10px 22px; border-radius:30px;
+    border:1px solid var(--gold-soft); background:transparent; color:var(--gold-soft);
+    font-family:'Poppins'; font-size:12px; letter-spacing:1px; cursor:pointer;
+  }
+
+  /* music toggle, fixed corner */
+  #musicToggle{
+    position:absolute; top:16px; right:16px; z-index:20;
+    width:38px;height:38px;border-radius:50%; border:1px solid var(--line);
+    background:rgba(0,0,0,.3); color:var(--gold-soft); font-size:14px;
+    display:flex;align-items:center;justify-content:center; cursor:pointer;
+  }
+  #progressDots{
+    position:absolute; top:16px; left:16px; z-index:20; display:flex; gap:5px;
+  }
+  #progressDots span{ width:5px;height:5px;border-radius:50%; background:rgba(230,200,138,0.25); transition:background .3s; }
+  #progressDots span.on{ background:var(--gold-soft); }
+
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important;} }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="stars" id="stars"></div>
+  <div id="progressDots"></div>
+  <button id="musicToggle" aria-label="Putar musik">♪</button>
+  <audio id="audioPlayer" src="lagu.mp3" preload="none" loop></audio>
+
+  <!-- SLIDE 1 -->
+  <div class="slide active" data-slide="1">
+    <div class="eyebrow">Ada kejutan untukmu</div>
+    <div class="envelope">
+      <div class="env-body"></div><div class="env-flap"></div><div class="env-seal">❤</div>
+    </div>
+    <div class="intro-title">Buka dulu, ya.<br>Ini untukmu.</div>
+    <div class="tap-hint">ketuk layar untuk lanjut</div>
+  </div>
+
+  <!-- SLIDE 2 : typewriter -->
+  <div class="slide" data-slide="2">
+    <div class="type-line" id="typeLine"></div>
+    <div class="tap-hint">ketuk untuk lanjut</div>
+  </div>
+
+  <!-- SLIDE 3 : distance signature -->
+  <div class="slide" data-slide="3">
+    <div class="eyebrow">Indonesia — Taiwan</div>
+    <div class="distance-map">
+      <svg viewBox="0 0 340 130">
+        <path class="map-path" d="M 60 100 C 140 20, 220 20, 280 45"></path>
+        <path class="map-path-glow" d="M 60 100 C 140 20, 220 20, 280 45" pathLength="340"></path>
+        <g class="pin" transform="translate(60,100)">
+          <circle class="ring" cx="0" cy="0" r="5"></circle>
+          <circle class="dot" cx="0" cy="0" r="3.5"></circle>
+          <text x="-24" y="20">Indonesia</text>
+        </g>
+        <g class="pin" transform="translate(280,45)">
+          <circle class="ring" cx="0" cy="0" r="5"></circle>
+          <circle class="dot" cx="0" cy="0" r="3.5"></circle>
+          <text x="-8" y="-12">Taiwan</text>
+        </g>
+        <text class="plane" style="offset-path: path('M 60 100 C 140 20, 220 20, 280 45');">✈</text>
+      </svg>
+    </div>
+    <div class="distance-label">Ribuan kilometer jauhnya,<br>tapi <strong>hati ini tetap di sampingmu.</strong></div>
+    <div class="tap-hint">ketuk untuk lanjut</div>
+  </div>
+
+  <!-- SLIDE 4 : polaroid gallery -->
+  <div class="slide" data-slide="4">
+    <div class="eyebrow">Kita, Lewat Layar dan Waktu</div>
+    <div class="polaroid-stack" id="polaroidStack"></div>
+    <div class="gallery-note">
+      Taruh foto di folder yang sama, beri nama <code>foto1.jpg</code> sampai <code>foto5.jpg</code>.
+    </div>
+    <div class="tap-hint">ketuk untuk ganti foto / lanjut</div>
+  </div>
+
+  <!-- SLIDE 4b : heart photo collage -->
+  <div class="slide" data-slide="4b">
+    <div class="eyebrow">Kamu, Dalam Satu Bentuk Hati</div>
+    <div class="heart-wrap" id="heartWrap"></div>
+    <div class="gallery-note">
+      Pakai foto <code>foto1.jpg</code> sampai <code>foto12.jpg</code> — susunannya sudah otomatis membentuk siluet hati.
+    </div>
+    <div class="tap-hint">ketuk untuk lanjut</div>
+  </div>
+
+  <!-- SLIDE 5 : letter -->
+  <div class="slide" data-slide="5">
+    <div class="eyebrow">Untukmu</div>
+    <div class="letter-box">
+      <p>Selamat ulang tahun, sayang. Aku tahu tahun ini terasa berbeda — kita rayakan hari ini dengan jarak yang tidak pernah kita minta, kamu di Taiwan, aku di Indonesia, hanya lewat layar dan suara.</p>
+      <p>Tapi izinkan aku bilang: jarak itu tidak pernah sekalipun membuatku berhenti memikirkanmu. Setiap pagi kamu di sana adalah malamku di sini, dan aku selalu menghitung waktu supaya bisa menyapamu lebih dulu daripada hal lain.</p>
+      <p>Hari ini, aku ingin kamu tahu betapa bangganya aku padamu. Kamu berjuang jauh dari rumah, kuat menghadapi hari-hari yang tidak selalu mudah, dan tetap memilih untuk bertahan — untuk kita.</p>
+      <p>Semoga di usia barumu ini, semua yang kamu perjuangkan di perantauan berbuah manis. Semoga rindu ini semakin dekat waktunya untuk terobati, dan semoga kamu selalu ingat: di ujung layar ini, ada aku yang menunggumu pulang.</p>
+      <div class="signature">— yang selalu merindukanmu dari Indonesia</div>
+    </div>
+    <div class="tap-hint">ketuk untuk lanjut</div>
+  </div>
+
+  <!-- SLIDE 6 : cake blow -->
+  <div class="slide" data-slide="6" id="cakeSlide">
+    <div class="cake-title">Buat permohonan,<br>lalu tiup lilinnya.</div>
+    <div class="cake-wrap">
+      <div class="candle"></div>
+      <div class="flame" id="flame"></div>
+      <div class="cake-body"></div>
+    </div>
+    <div class="blow-hint" id="blowHint">ketuk lilin untuk meniupnya</div>
+    <div class="confetti-layer" id="confettiLayer"></div>
+  </div>
+
+  <!-- SLIDE 7 : closing -->
+  <div class="slide" data-slide="7">
+    <div class="closing-big">Selamat merayakan usia baru,<br>di negeri orang.<br>Aku menunggu di ujung rindu ini. <span class="heart">♥</span></div>
+    <button class="replay-btn" id="replayBtn">ulangi dari awal</button>
+  </div>
+
+</div>
+
+<script>
+  const app = document.getElementById('app');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  // bintang
+  const starsWrap = document.getElementById('stars');
+  for(let i=0;i<40;i++){
+    const s = document.createElement('span');
+    s.style.position='absolute';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    starsWrap.appendChild(s);
+  }
+
+  // progress dots
+  const dotsWrap = document.getElementById('progressDots');
+  slides.forEach((_,i)=>{
+    const d = document.createElement('span');
+    dotsWrap.appendChild(d);
+  });
+  function updateDots(){
+    dotsWrap.querySelectorAll('span').forEach((d,i)=>{
+      d.classList.toggle('on', i===current);
+    });
+  }
+
+  function goTo(i){
+    if(i<0||i>=slides.length) return;
+    slides[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('active');
+    updateDots();
+    if(current===1) typeGreeting();
+  }
+  updateDots();
+
+  app.addEventListener('click', (e)=>{
+    if(e.target.closest('#musicToggle') || e.target.closest('#replayBtn') || e.target.closest('#flame')) return;
+    if(current === slides.length-1) return; // slide terakhir tidak lanjut otomatis
+    if(current === 6 && !flameBlown) return; // slide kue: harus tiup dulu
+    goTo(current+1);
+  });
+
+  document.getElementById('replayBtn').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    flameBlown = false;
+    document.getElementById('flame').classList.remove('blown');
+    document.getElementById('blowHint').style.opacity = 1;
+    goTo(0);
+  });
+
+  // typewriter
+  let typed = false;
+  function typeGreeting(){
+    if(typed) return; typed = true;
+    const el = document.getElementById('typeLine');
+    const text = "Hai, sayangku.\nSelamat ulang tahun,\n2 Agustus ini spesial untukmu.";
+    let i = 0;
+    el.innerHTML = '<span class="cursor"></span>';
+    function step(){
+      if(i <= text.length){
+        const shown = text.slice(0,i).replace(/\n/g,'<br>');
+        el.innerHTML = shown + '<span class="cursor"></span>';
+        i++;
+        setTimeout(step, 45);
+      }
+    }
+    step();
+  }
+
+  // polaroid gallery
+  const captions = ['dari jauh, tapi dekat di hati','video call yang selalu kutunggu','senyummu yang kurindukan','sampai kita bertemu lagi','selalu, dari Indonesia'];
+  const stack = document.getElementById('polaroidStack');
+  let photoIndex = 0;
+  function renderPolaroid(){
+    stack.innerHTML = '';
+    const card = document.createElement('div');
+    card.className = 'polaroid';
+    const rot = (photoIndex % 2 === 0) ? '-4deg' : '4deg';
+    card.style.transform = `rotate(${rot})`;
+    card.innerHTML = `
+      <div class="ph"><img src="foto${photoIndex+1}.jpg" onerror="this.style.display='none'; this.parentElement.querySelector('.ph-label').style.display='block';">
+      <div class="ph-label" style="display:none;">foto${photoIndex+1}.jpg</div></div>
+      <div class="cap">${captions[photoIndex % captions.length]}</div>`;
+    stack.appendChild(card);
+  }
+  renderPolaroid();
+  document.getElementById('polaroidStack').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    photoIndex = (photoIndex+1) % 5;
+    renderPolaroid();
+  });
+
+  // heart photo collage - posisi dihitung dari persamaan parametrik hati klasik:
+  // x(t) = 16 sin^3(t), y(t) = 13 cos(t) - 5 cos(2t) - 2 cos(3t) - cos(4t)
+  const heartWrap = document.getElementById('heartWrap');
+  const HEART_PHOTO_COUNT = 12; // jumlah foto yang membentuk siluet hati
+  function heartPoint(tDeg){
+    const t = tDeg * Math.PI/180;
+    const x = 16*Math.pow(Math.sin(t),3);
+    const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+    return {x, y};
+  }
+  function renderHeart(){
+    heartWrap.innerHTML = '';
+    // rentang kurva: x kira-kira [-16,16], y kira-kira [-17,13]
+    const scale = 7.3;
+    const cx = 150, cy = 118;
+    const cardW = 52, cardH = 66;
+    // mulai dari t=180 (ujung bawah hati) supaya titik terbawah pas kena kartu,
+    // lalu sebar merata mengelilingi kurva
+    for(let i=0;i<HEART_PHOTO_COUNT;i++){
+      const tDeg = 180 + i*(360/HEART_PHOTO_COUNT);
+      const pt = heartPoint(tDeg);
+      const px = cx + pt.x*scale - cardW/2;
+      const py = cy - pt.y*scale - cardH/2;
+      // rotasi kartu mengikuti arah tangen kurva supaya rapi mengikuti bentuk
+      const t2 = (tDeg+2)*Math.PI/180, t1=(tDeg-2)*Math.PI/180;
+      const p2 = heartPoint((tDeg+2)); const p1 = heartPoint((tDeg-2));
+      let angleRad = Math.atan2(-(p2.y-p1.y), p2.x-p1.x);
+      let rotDeg = angleRad*180/Math.PI - 90;
+      // batasi rotasi biar tidak terlalu miring
+      rotDeg = Math.max(-25, Math.min(25, rotDeg));
+
+      const card = document.createElement('div');
+      card.className = 'heart-card';
+      card.style.left = px+'px';
+      card.style.top = py+'px';
+      card.style.zIndex = 10+i;
+      card.style.transform = `rotate(${rotDeg.toFixed(1)}deg)`;
+      card.style.animationDelay = (i*0.07)+'s';
+      card.innerHTML = `<img src="foto${i+1}.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hc-fallback" style="display:none;">foto${i+1}.jpg</div>`;
+      heartWrap.appendChild(card);
+    }
+  }
+  renderHeart();
+
+  // cake blow
+  let flameBlown = false;
+  document.getElementById('flame').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(flameBlown) return;
+    flameBlown = true;
+    document.getElementById('flame').classList.add('blown');
+    document.getElementById('blowHint').style.opacity = 0;
+    burstConfetti();
+    setTimeout(()=> goTo(current+1), 1400);
+  });
+
+  function burstConfetti(){
+    const layer = document.getElementById('confettiLayer');
+    const colors = ['#e6c78a','#e6a8bb','#f6ece1','#a8455f'];
+    for(let i=0;i<40;i++){
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = Math.random()*100+'%';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.transform = `rotate(${Math.random()*360}deg)`;
+      layer.appendChild(p);
+      const duration = 1.6 + Math.random()*1.2;
+      p.animate([
+        { transform:`translateY(0) rotate(0deg)`, opacity:1 },
+        { transform:`translateY(${420+Math.random()*100}px) rotate(${360+Math.random()*360}deg)`, opacity:0 }
+      ], { duration: duration*1000, easing:'ease-in', delay: Math.random()*300 });
+      setTimeout(()=>p.remove(), duration*1000+400);
+    }
+  }
+
+  // musik
+  const audio = document.getElementById('audioPlayer');
+  const musicBtn = document.getElementById('musicToggle');
+  musicBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(audio.paused){
+      audio.play().then(()=>{ musicBtn.textContent='❚❚'; })
+        .catch(()=>{ alert('Belum ada file lagu.mp3 di folder ini. Taruh file musikmu dulu, lalu coba lagi.'); });
+    } else {
+      audio.pause(); musicBtn.textContent='♪';
+    }
+  });
+</script>
+
+</body>
+</html>
