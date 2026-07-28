@@ -652,7 +652,7 @@
       <div class="stars" id="stars"></div>
       <div id="progressDots"></div>
       <button id="musicToggle" aria-label="Putar musik">♪</button>
-      <audio id="audioPlayer" src="lagu.mp3" preload="none" loop></audio>
+      <audio id="audioPlayer" src="images/lagu.mp3" preload="none" loop></audio>
 
       <!-- SLIDE 1 -->
       <div class="slide active" data-slide="1">
@@ -743,7 +743,7 @@
         <div class="eyebrow">Kita, Lewat Layar dan Waktu</div>
         <div class="polaroid-stack" id="polaroidStack"></div>
         <div class="gallery-note">
-          Taruh foto di folder yang sama, beri nama
+          Taruh foto di folder <code>images/</code>, beri nama
           <code>foto1.jpg</code> sampai <code>foto5.jpg</code>.
         </div>
         <div class="tap-hint">ketuk untuk ganti foto / lanjut</div>
@@ -754,8 +754,9 @@
         <div class="eyebrow">Kamu, Dalam Satu Bentuk Hati</div>
         <div class="heart-wrap" id="heartWrap"></div>
         <div class="gallery-note">
-          Pakai foto <code>foto1.jpg</code> sampai <code>foto12.jpg</code> —
-          susunannya sudah otomatis membentuk siluet hati.
+          Pakai foto <code>images/foto1.jpg</code> sampai
+          <code>images/foto12.jpg</code> — susunannya sudah otomatis membentuk
+          siluet hati.
         </div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
@@ -913,9 +914,9 @@
         const rot = photoIndex % 2 === 0 ? "-4deg" : "4deg";
         card.style.transform = `rotate(${rot})`;
         card.innerHTML = `
-      <div class="ph"><img src="foto${photoIndex + 1}.jpg" onerror="this.style.display='none'; this.parentElement.querySelector('.ph-label').style.display='block';">
-      <div class="ph-label" style="display:none;">foto${photoIndex + 1}.jpg</div></div>
-      <div class="cap">${captions[photoIndex % captions.length]}</div>`;
+        <div class="ph"><img src="images/foto${photoIndex + 1}.jpg" onerror="this.style.display='none'; this.parentElement.querySelector('.ph-label').style.display='block';">
+        <div class="ph-label" style="display:none;">foto${photoIndex + 1}.jpg</div></div>
+        <div class="cap">${captions[photoIndex % captions.length]}</div>`;
         stack.appendChild(card);
       }
       renderPolaroid();
@@ -961,8 +962,8 @@
           card.style.zIndex = 10 + i;
           card.style.transform = `rotate(${pt.r}deg)`;
           card.style.animationDelay = i * 0.07 + "s";
-          card.innerHTML = `<img src="foto${i + 1}.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="hc-fallback" style="display:none;">foto${i + 1}.jpg</div>`;
+          card.innerHTML = `<img src="images/foto${i + 1}.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="hc-fallback" style="display:none;">foto${i + 1}.jpg</div>`;
           heartWrap.appendChild(card);
         });
       }
@@ -1024,7 +1025,7 @@
             })
             .catch(() => {
               alert(
-                "Belum ada file lagu.mp3 di folder ini. Taruh file musikmu dulu, lalu coba lagi.",
+                "Belum ada file lagu.mp3 di folder images/. Taruh file musikmu dulu, lalu coba lagi.",
               );
             });
         } else {
