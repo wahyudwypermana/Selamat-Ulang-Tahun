@@ -973,7 +973,22 @@
 
       // coba beberapa ekstensi (jpg/JPG/jpeg/png dst) supaya tidak masalah huruf besar-kecil
       function imgWithFallback(basePath, fallbackHtml) {
-        const exts = ["jpg", "JPG", "jpeg", "JPEG", "png", "PNG"];
+        const exts = [
+          "jpg",
+          "JPG",
+          "jpeg",
+          "JPEG",
+          "png",
+          "PNG",
+          "webp",
+          "WEBP",
+          "gif",
+          "GIF",
+          "jfif",
+          "JFIF",
+          "avif",
+          "AVIF",
+        ];
         let attempt = 0;
         function tryNext(imgEl) {
           attempt++;
