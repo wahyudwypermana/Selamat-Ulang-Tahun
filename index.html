@@ -326,8 +326,8 @@
       /* SLIDE 4 : polaroid gallery */
       .polaroid-stack {
         position: relative;
-        width: 220px;
-        height: 260px;
+        width: 270px;
+        height: 320px;
         margin-bottom: 22px;
       }
       .polaroid {
@@ -391,16 +391,16 @@
       /* SLIDE 4b : heart photo collage */
       .heart-wrap {
         position: relative;
-        width: 320px;
-        height: 330px;
+        width: 380px;
+        height: 392px;
         margin: 6px auto 10px;
         max-width: 100%;
       }
       .heart-card {
         position: absolute;
-        width: 58px;
-        height: 72px;
-        border-radius: 5px;
+        width: 69px;
+        height: 86px;
+        border-radius: 6px;
         background: #f6ece1;
         padding: 3px;
         border: 1px solid rgba(255, 255, 255, 0.6);
@@ -575,6 +575,12 @@
         height: 14px;
         opacity: 0;
       }
+      .heart-fall-piece {
+        position: absolute;
+        top: -30px;
+        opacity: 0;
+        pointer-events: none;
+      }
 
       /* SLIDE 8 : closing */
       .closing-big {
@@ -740,8 +746,8 @@
         <div class="polaroid-stack" id="polaroidStack"></div>
         <div class="gallery-note">
           Taruh foto di folder <code>images/</code>, beri nama
-          <code>foto1</code> sampai <code>foto5</code> (ekstensi jpg/JPG/png
-          bebas).
+          <code>galeri1</code> sampai <code>galeri5</code> (ekstensi
+          jpg/JPG/png bebas).
         </div>
         <div class="tap-hint">ketuk untuk ganti foto / lanjut</div>
       </div>
@@ -751,9 +757,9 @@
         <div class="eyebrow">Kamu, Dalam Satu Bentuk Hati</div>
         <div class="heart-wrap" id="heartWrap"></div>
         <div class="gallery-note">
-          Pakai foto <code>images/foto1</code> sampai
-          <code>images/foto12</code> (ekstensi jpg/JPG/png bebas) — susunannya
-          sudah otomatis membentuk siluet hati.
+          Pakai foto <code>images/hati1</code> sampai
+          <code>images/hati12</code> (ekstensi jpg/JPG/png bebas) —
+          susunannya sudah otomatis membentuk siluet hati.
         </div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
@@ -927,7 +933,7 @@
         const rot = photoIndex % 2 === 0 ? "-4deg" : "4deg";
         card.style.transform = `rotate(${rot})`;
         card.innerHTML = `
-        <div class="ph">${imgWithFallback(`images/foto${photoIndex + 1}`, `<div class="ph-label" style="display:none;">foto${photoIndex + 1}.*</div>`)}</div>
+        <div class="ph">${imgWithFallback(`images/galeri${photoIndex + 1}`, `<div class="ph-label" style="display:none;">galeri${photoIndex + 1}.*</div>`)}</div>
         <div class="cap">${captions[photoIndex % captions.length]}</div>`;
         stack.appendChild(card);
       }
@@ -973,8 +979,8 @@
           card.style.transform = `rotate(${pt.r}deg)`;
           card.style.animationDelay = i * 0.07 + "s";
           card.innerHTML = imgWithFallback(
-            `images/foto${i + 1}`,
-            `<div class="hc-fallback" style="display:none;">foto${i + 1}.*</div>`,
+            `images/hati${i + 1}`,
+            `<div class="hc-fallback" style="display:none;">hati${i + 1}.*</div>`,
           );
           heartWrap.appendChild(card);
         });
@@ -991,6 +997,7 @@
         document.getElementById("flame").classList.add("blown");
         document.getElementById("blowHint").style.opacity = 0;
         burstConfetti();
+        rainHearts();
         setTimeout(() => goTo(current + 1), 1400);
       });
 
@@ -1021,6 +1028,48 @@
             },
           );
           setTimeout(() => p.remove(), duration * 1000 + 400);
+        }
+      }
+
+      function rainHearts() {
+        const layer = document.getElementById("confettiLayer");
+        const colors = ["#e6a8bb", "#a8455f", "#e6c78a", "#f6ece1"];
+        const count = 26;
+        for (let i = 0; i < count; i++) {
+          const h = document.createElement("div");
+          h.className = "heart-fall-piece";
+          h.textContent = "♥";
+          const size = 12 + Math.random() * 16;
+          h.style.left = Math.random() * 100 + "%";
+          h.style.fontSize = size + "px";
+          h.style.color = colors[Math.floor(Math.random() * colors.length)];
+          h.style.filter = `drop-shadow(0 0 4px ${colors[Math.floor(Math.random() * colors.length)]})`;
+          layer.appendChild(h);
+          const duration = 2 + Math.random() * 1.6;
+          const drift = (Math.random() - 0.5) * 80;
+          h.animate(
+            [
+              {
+                transform: `translate(0, 0) rotate(0deg)`,
+                opacity: 0,
+              },
+              {
+                transform: `translate(${drift * 0.5}px, 40vh) rotate(${(Math.random() - 0.5) * 90}deg)`,
+                opacity: 1,
+                offset: 0.15,
+              },
+              {
+                transform: `translate(${drift}px, 90vh) rotate(${(Math.random() - 0.5) * 180}deg)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: duration * 1000,
+              easing: "ease-in",
+              delay: Math.random() * 500,
+            },
+          );
+          setTimeout(() => h.remove(), duration * 1000 + 700);
         }
       }
 
