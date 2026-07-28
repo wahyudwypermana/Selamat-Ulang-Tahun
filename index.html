@@ -81,7 +81,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 40px 30px;
+        padding: 36px 30px 76px;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.8s ease;
@@ -326,9 +326,9 @@
       /* SLIDE 4 : polaroid gallery */
       .polaroid-stack {
         position: relative;
-        width: 270px;
-        height: 320px;
-        margin-bottom: 22px;
+        width: min(250px, 68vw);
+        height: min(295px, 38vh);
+        margin-bottom: 18px;
       }
       .polaroid {
         position: absolute;
@@ -377,8 +377,8 @@
       .gallery-note {
         font-size: 11px;
         color: var(--cream-dim);
-        margin-top: 6px;
-        line-height: 1.7;
+        margin-top: 4px;
+        line-height: 1.6;
         max-width: 260px;
       }
       .gallery-note code {
@@ -391,16 +391,16 @@
       /* SLIDE 4b : heart photo collage */
       .heart-wrap {
         position: relative;
-        width: 380px;
-        height: 392px;
-        margin: 6px auto 10px;
+        width: min(300px, 78vw);
+        height: min(310px, 40vh);
+        margin: 4px auto 8px;
         max-width: 100%;
       }
       .heart-card {
         position: absolute;
-        width: 69px;
-        height: 86px;
-        border-radius: 6px;
+        width: 62px;
+        height: 77px;
+        border-radius: 5px;
         background: #f6ece1;
         padding: 3px;
         border: 1px solid rgba(255, 255, 255, 0.6);
@@ -492,50 +492,73 @@
         margin-bottom: 18px;
       }
 
-      .cake-body {
+      .cake-svg-wrap {
         position: absolute;
         left: 50%;
         bottom: 0;
         transform: translateX(-50%);
-        width: 240px;
-        height: 130px;
-        background: linear-gradient(180deg, #a8455f, #7a2c3f);
-        border-radius: 18px 18px 8px 8px;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+        width: 260px;
+        height: 210px;
       }
-      .cake-body::before {
-        content: "";
-        position: absolute;
-        top: -14px;
-        left: 0;
-        right: 0;
-        height: 28px;
-        background: repeating-linear-gradient(
-          90deg,
-          #e6c78a 0 18px,
-          #f6ece1 18px 36px
-        );
-        border-radius: 12px;
+      .cake-svg-wrap svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .cs-drip {
+        filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+      }
+      .cs-sparkle {
+        animation: cs-twinkle 2.2s infinite ease-in-out;
+        transform-origin: center;
+      }
+      .cs-sparkle:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+      .cs-sparkle:nth-child(3) {
+        animation-delay: 1s;
+      }
+      @keyframes cs-twinkle {
+        0%,
+        100% {
+          opacity: 0.25;
+          transform: scale(0.85);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
       }
       .candle {
         position: absolute;
         left: 50%;
-        bottom: 130px;
+        bottom: 168px;
         transform: translateX(-50%);
-        width: 10px;
-        height: 54px;
-        background: linear-gradient(180deg, #f6ece1, #cbb8ae);
+        width: 9px;
+        height: 40px;
+        background: repeating-linear-gradient(
+          180deg,
+          #f6ece1 0 6px,
+          #e6a8bb 6px 12px
+        );
         border-radius: 3px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
       }
       .flame {
         position: absolute;
         left: 50%;
-        bottom: 182px;
+        bottom: 205px;
         transform: translateX(-50%);
-        width: 14px;
-        height: 26px;
-        background: linear-gradient(180deg, #ffd98a, #e8823a);
-        border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+        width: 13px;
+        height: 24px;
+        background: radial-gradient(
+          circle at 50% 70%,
+          #fff3c4 0%,
+          #ffd98a 35%,
+          #e8823a 75%,
+          #c85a2c 100%
+        );
+        border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
         transform-origin: center bottom;
         animation: flicker 1.4s infinite ease-in-out;
         filter: drop-shadow(0 0 8px #ffb84d);
@@ -746,8 +769,8 @@
         <div class="polaroid-stack" id="polaroidStack"></div>
         <div class="gallery-note">
           Taruh foto di folder <code>images/</code>, beri nama
-          <code>galeri1</code> sampai <code>galeri5</code> (ekstensi jpg/JPG/png
-          bebas).
+          <code>galeri1</code> sampai <code>galeri5</code> (ekstensi
+          jpg/JPG/png bebas).
         </div>
         <div class="tap-hint">ketuk untuk ganti foto / lanjut</div>
       </div>
@@ -758,8 +781,8 @@
         <div class="heart-wrap" id="heartWrap"></div>
         <div class="gallery-note">
           Pakai foto <code>images/hati1</code> sampai
-          <code>images/hati12</code> (ekstensi jpg/JPG/png bebas) — susunannya
-          sudah otomatis membentuk siluet hati.
+          <code>images/hati12</code> (ekstensi jpg/JPG/png bebas) —
+          susunannya sudah otomatis membentuk siluet hati.
         </div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
@@ -801,7 +824,75 @@
         <div class="cake-wrap">
           <div class="flame" id="flame"></div>
           <div class="candle"></div>
-          <div class="cake-body"></div>
+          <div class="cake-svg-wrap">
+            <svg viewBox="0 0 260 168" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="tierTop" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f6ece1" />
+                  <stop offset="100%" stop-color="#e2c9b0" />
+                </linearGradient>
+                <linearGradient id="tierBottom" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#c15a72" />
+                  <stop offset="100%" stop-color="#7a2c3f" />
+                </linearGradient>
+                <linearGradient id="tierUpper" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#e6a8bb" />
+                  <stop offset="100%" stop-color="#a8455f" />
+                </linearGradient>
+                <linearGradient id="plateGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#8a6a3c" />
+                  <stop offset="50%" stop-color="#e6c78a" />
+                  <stop offset="100%" stop-color="#8a6a3c" />
+                </linearGradient>
+              </defs>
+
+              <!-- plate -->
+              <ellipse cx="130" cy="160" rx="118" ry="8" fill="url(#plateGrad)" opacity="0.9" />
+              <ellipse cx="130" cy="157" rx="118" ry="7" fill="#f6ece1" opacity="0.15" />
+
+              <!-- bottom tier -->
+              <rect x="20" y="98" width="220" height="58" rx="14" fill="url(#tierBottom)" />
+              <path class="cs-drip" d="M20 108 Q40 122 55 108 Q70 128 85 108 Q100 124 115 108 Q130 126 145 108 Q160 122 175 108 Q190 128 205 108 Q220 120 240 108 L240 98 L20 98 Z" fill="#e6c78a" opacity="0.9" />
+
+              <!-- upper tier -->
+              <rect x="45" y="56" width="170" height="48" rx="12" fill="url(#tierUpper)" />
+              <path class="cs-drip" d="M45 64 Q60 76 72 64 Q85 80 98 64 Q111 78 124 64 Q137 80 150 64 Q163 78 176 64 Q189 80 202 64 Q208 68 215 64 L215 56 L45 56 Z" fill="#f6ece1" opacity="0.85" />
+
+              <!-- top tier -->
+              <rect x="70" y="26" width="120" height="36" rx="10" fill="url(#tierTop)" />
+              <path d="M70 30 Q90 38 100 30 Q112 40 122 30 Q135 40 148 30 Q160 40 172 30 Q180 34 190 30 L190 26 L70 26 Z" fill="#e6c78a" opacity="0.7" />
+
+              <!-- piped dots along tiers -->
+              <g fill="#f6ece1" opacity="0.8">
+                <circle cx="55" cy="104" r="3.5" />
+                <circle cx="95" cy="104" r="3.5" />
+                <circle cx="135" cy="104" r="3.5" />
+                <circle cx="175" cy="104" r="3.5" />
+                <circle cx="205" cy="104" r="3.5" />
+              </g>
+              <g fill="#e6a8bb" opacity="0.85">
+                <circle cx="70" cy="62" r="3" />
+                <circle cx="105" cy="62" r="3" />
+                <circle cx="140" cy="62" r="3" />
+                <circle cx="175" cy="62" r="3" />
+              </g>
+
+              <!-- little cherries -->
+              <g>
+                <circle cx="92" cy="34" r="5" fill="#a8455f" />
+                <circle cx="90" cy="31" r="1.6" fill="#e6c78a" opacity="0.7" />
+                <circle cx="168" cy="34" r="5" fill="#a8455f" />
+                <circle cx="166" cy="31" r="1.6" fill="#e6c78a" opacity="0.7" />
+              </g>
+
+              <!-- sparkles -->
+              <g fill="#e6c78a">
+                <path class="cs-sparkle" d="M35 70 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 Z" />
+                <path class="cs-sparkle" d="M225 88 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6 Z" />
+                <path class="cs-sparkle" d="M130 12 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6 Z" />
+              </g>
+            </svg>
+          </div>
         </div>
         <div class="blow-hint" id="blowHint">ketuk lilin untuk meniupnya</div>
         <div class="confetti-layer" id="confettiLayer"></div>
