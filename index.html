@@ -232,10 +232,11 @@
         width: 100%;
         height: 100%;
       }
-      .landmass {
-        fill: rgba(230, 200, 138, 0.1);
-        stroke: rgba(230, 200, 138, 0.22);
-        stroke-width: 1;
+      .landmass path {
+        fill: rgba(230, 200, 138, 0.14);
+        stroke: rgba(230, 200, 138, 0.4);
+        stroke-width: 1.2;
+        stroke-linejoin: round;
       }
       .sea-label {
         font-size: 7px;
@@ -250,13 +251,21 @@
         stroke-dasharray: 340;
         stroke-dashoffset: 340;
         filter: drop-shadow(0 0 4px var(--rose));
+        opacity: 0;
       }
       .slide.active .map-path-glow {
-        animation: draw 3s ease forwards 0.3s;
+        animation:
+          draw 2s ease forwards 0.6s,
+          fadeIn 0.2s ease forwards 0.6s;
       }
       @keyframes draw {
         to {
           stroke-dashoffset: 0;
+        }
+      }
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
         }
       }
       .map-path {
@@ -272,9 +281,14 @@
         fill: none;
         stroke: var(--gold-soft);
         stroke-width: 1.5;
-        opacity: 0.6;
-        animation: ring 2.4s infinite ease-out;
+        opacity: 0;
         transform-origin: center;
+      }
+      .slide.active .pin circle.ring {
+        animation: ring 2.4s infinite ease-out 0.1s;
+      }
+      .slide.active .pin--delayed circle.ring {
+        animation: ring 2.4s infinite ease-out 2.6s;
       }
       @keyframes ring {
         0% {
@@ -295,10 +309,11 @@
         font-size: 14px;
         offset-rotate: 0deg;
         color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
         filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
       }
       .slide.active .plane {
-        animation: fly 3s ease forwards 0.3s;
+        animation: fly 2s ease forwards 0.6s;
       }
       @keyframes fly {
         0% {
@@ -312,11 +327,36 @@
           offset-distance: 100%;
         }
       }
+      .distance-figure {
+        font-family: "Playfair Display", serif;
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: var(--gold-soft);
+        margin-top: 16px;
+        opacity: 0;
+      }
+      .slide.active .distance-figure {
+        animation: fadeUp 0.7s ease forwards 2.6s;
+      }
       .distance-label {
         font-size: 12px;
         color: var(--cream-dim);
-        margin-top: 14px;
+        margin-top: 8px;
         letter-spacing: 0.5px;
+        opacity: 0;
+      }
+      .slide.active .distance-label {
+        animation: fadeUp 0.7s ease forwards 2.85s;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .distance-label strong {
         color: var(--rose);
@@ -587,10 +627,96 @@
           transform: translateX(-50%) scale(1.08) rotate(2deg);
         }
       }
-      .flame.blown {
+      .flame.wiggle {
+        animation: wiggle 0.35s ease-in-out;
+      }
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1) rotate(0deg);
+        }
+        25% {
+          transform: translateX(-50%) scale(1.05) rotate(-10deg);
+        }
+        50% {
+          transform: translateX(-50%) scale(0.95) rotate(9deg);
+        }
+        75% {
+          transform: translateX(-50%) scale(1.02) rotate(-6deg);
+        }
+      }
+      .flame.dying {
+        animation: dying 0.3s ease-out forwards;
+      }
+      @keyframes dying {
+        0% {
+          transform: translateX(-50%) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(-50%) scale(0.15);
+          opacity: 0;
+        }
+      }
+      .flame.out {
         animation: none;
         opacity: 0;
-        transition: opacity 0.4s ease;
+      }
+      .candle.sink {
+        transition: transform 1s ease;
+        transform: translateX(-50%) translateY(24px);
+      }
+      .smoke-wisp {
+        position: absolute;
+        left: 50%;
+        bottom: 205px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(230, 224, 218, 0.55);
+        filter: blur(2px);
+        pointer-events: none;
+        opacity: 0;
+      }
+      .cake-dim {
+        position: absolute;
+        inset: 0;
+        background: #000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 5;
+      }
+      .cake-dim.active {
+        opacity: 0.22;
+      }
+      .wish-text {
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-size: 13px;
+        color: var(--cream-dim);
+        margin-top: 22px;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        max-width: 260px;
+        line-height: 1.7;
+      }
+      .wish-text.show {
+        opacity: 1;
+      }
+      .cake-title.swap {
+        animation: titleSwap 0.6s ease;
+      }
+      @keyframes titleSwap {
+        0% {
+          opacity: 1;
+        }
+        45% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       .blow-hint {
@@ -630,9 +756,9 @@
         inset: 0;
         background: linear-gradient(
           180deg,
-          rgba(22, 13, 18, 0.55) 0%,
-          rgba(22, 13, 18, 0.75) 55%,
-          rgba(22, 13, 18, 0.92) 100%
+          rgba(22, 13, 18, 0.4) 0%,
+          rgba(22, 13, 18, 0.58) 55%,
+          rgba(22, 13, 18, 0.8) 100%
         );
         z-index: 0;
       }
@@ -643,13 +769,15 @@
       .closing-big {
         font-family: "Playfair Display", serif;
         font-style: italic;
-        font-size: 22px;
+        font-size: 14.5px;
         color: var(--gold-soft);
-        line-height: 1.6;
-        margin-bottom: 20px;
+        line-height: 1.85;
+        margin-bottom: 22px;
+        max-width: 270px;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
       }
       .heart {
-        font-size: 20px;
+        font-size: 16px;
         color: var(--rose);
       }
       .replay-btn {
@@ -746,36 +874,26 @@
           <svg viewBox="0 0 340 130">
             <g class="landmass">
               <path
-                d="M 8 92 Q 24 78 44 86 Q 58 93 50 106 Q 36 117 20 111 Q 6 103 8 92 Z"
-              ></path>
-              <path
-                d="M 42 112 Q 68 107 96 114 Q 102 118 91 122 Q 64 126 45 120 Q 38 117 42 112 Z"
-              ></path>
-              <path
-                d="M 68 72 Q 94 61 116 75 Q 127 88 111 99 Q 89 108 72 94 Q 61 83 68 72 Z"
-              ></path>
-              <path
-                d="M 118 92 Q 132 82 144 90 Q 150 100 140 110 Q 128 116 120 105 Q 114 98 118 92 Z"
-              ></path>
-              <circle cx="180" cy="66" r="4"></circle>
-              <circle cx="190" cy="78" r="3"></circle>
-              <circle cx="172" cy="82" r="2.5"></circle>
-              <path
-                d="M 266 28 Q 278 19 289 28 Q 296 44 286 59 Q 276 64 267 52 Q 259 39 266 28 Z"
+                d="M 30 84 Q 10 88 8 100 Q 6 112 22 116 Q 42 120 58 112 Q 70 106 64 96 Q 56 84 30 84 Z"
               ></path>
             </g>
-            <path class="map-path" d="M 60 100 C 140 20, 220 20, 280 45"></path>
+            <g class="landmass landmass--taiwan">
+              <path
+                d="M 268 22 Q 280 16 289 24 Q 298 36 293 52 Q 288 66 278 64 Q 268 60 265 46 Q 262 32 268 22 Z"
+              ></path>
+            </g>
+            <path class="map-path" d="M 35 100 C 110 24, 200 16, 278 40"></path>
             <path
               class="map-path-glow"
-              d="M 60 100 C 140 20, 220 20, 280 45"
+              d="M 35 100 C 110 24, 200 16, 278 40"
               pathLength="340"
             ></path>
-            <g class="pin" transform="translate(60,100)">
+            <g class="pin" transform="translate(35,100)">
               <circle class="ring" cx="0" cy="0" r="5"></circle>
               <circle class="dot" cx="0" cy="0" r="3.5"></circle>
               <text x="-24" y="20">Indonesia</text>
             </g>
-            <g class="pin" transform="translate(280,45)">
+            <g class="pin pin--delayed" transform="translate(278,40)">
               <circle class="ring" cx="0" cy="0" r="5"></circle>
               <circle class="dot" cx="0" cy="0" r="3.5"></circle>
               <text x="-8" y="-12">Taiwan</text>
@@ -784,17 +902,18 @@
               class="plane"
               style="
                 offset-path: path(
-                  &quot;M 60 100 C 140 20, 220 20, 280 45&quot;
+                  &quot;M 35 100 C 110 24, 200 16, 278 40&quot;
                 );
               "
             >
-              ✈
+              ✈︎
             </text>
           </svg>
         </div>
+        <div class="distance-figure">± 3.800 km</div>
         <div class="distance-label">
-          Ribuan kilometer jauhnya,<br />tapi
-          <strong>hati ini tetap di sampingmu.</strong>
+          Ribuan kilometer mungkin memisahkan kita,<br />tapi
+          <strong>tidak pernah memisahkan hati kita.</strong>
         </div>
         <div class="tap-hint">ketuk untuk lanjut</div>
       </div>
@@ -887,10 +1006,14 @@
 
       <!-- SLIDE 6 : cake blow -->
       <div class="slide" data-slide="6" id="cakeSlide">
-        <div class="cake-title">Buat permohonan,<br />lalu tiup lilinnya.</div>
+        <div class="cake-title" id="cakeTitle">
+          Tutup matamu sejenak.<br />Buat satu permohonan, lalu tiup lilinnya.
+        </div>
         <div class="cake-wrap">
+          <div class="cake-dim" id="cakeDim"></div>
           <div class="flame" id="flame"></div>
-          <div class="candle"></div>
+          <div class="smoke-wisp" id="smokeWisp"></div>
+          <div class="candle" id="candle"></div>
           <div class="cake-svg-wrap">
             <svg viewBox="0 0 260 168" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -1020,6 +1143,10 @@
           </div>
         </div>
         <div class="blow-hint" id="blowHint">ketuk lilin untuk meniupnya</div>
+        <div class="wish-text" id="wishText">
+          Terima kasih sudah lahir di dunia ini. Karena tanpamu, aku tidak akan
+          memiliki cerita seindah ini. ❤️
+        </div>
         <div class="confetti-layer" id="confettiLayer"></div>
       </div>
 
@@ -1139,8 +1266,19 @@
       document.getElementById("replayBtn").addEventListener("click", (e) => {
         e.stopPropagation();
         flameBlown = false;
-        document.getElementById("flame").classList.remove("blown");
+        const flame = document.getElementById("flame");
+        const candle = document.getElementById("candle");
+        const cakeTitle = document.getElementById("cakeTitle");
+        const wishText = document.getElementById("wishText");
+        flame.classList.remove("wiggle", "dying", "out", "blown");
+        candle.classList.remove("sink");
+        wishText.classList.remove("show");
+        cakeTitle.classList.remove("swap");
+        cakeTitle.innerHTML =
+          "Tutup matamu sejenak.<br />Buat satu permohonan, lalu tiup lilinnya.";
         document.getElementById("blowHint").style.opacity = 1;
+        document.getElementById("blowHint").textContent =
+          "ketuk lilin untuk meniupnya";
         goTo(0);
       });
 
@@ -1152,7 +1290,7 @@
         typed = true;
         const el = document.getElementById("typeLine");
         const divider = document.getElementById("greetDivider");
-        const text = `Hai, ${RECIPIENT_NAME}.\nSelamat ulang tahun,\n2 Agustus ini spesial untukmu.`;
+        const text = `Hai, ${RECIPIENT_NAME}.\nSelamat ulang tahun,\n2 Agustus 2026 ini spesial untukmu.`;
         let i = 0;
         el.innerHTML = '<span class="cursor"></span>';
         function step() {
@@ -1277,21 +1415,142 @@
 
       // cake blow
       let flameBlown = false;
+      let audioCtx = null;
+      function getAudioCtx() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        return audioCtx;
+      }
+      function playBlowSound() {
+        try {
+          const ctx = getAudioCtx();
+          const bufferSize = ctx.sampleRate * 0.45;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = "bandpass";
+          filter.frequency.value = 550;
+          filter.Q.value = 0.6;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          noise.connect(filter).connect(gain).connect(ctx.destination);
+          noise.start();
+          noise.stop(ctx.currentTime + 0.45);
+        } catch (err) {}
+      }
+      function playPopSound() {
+        try {
+          const ctx = getAudioCtx();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(240, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(
+            700,
+            ctx.currentTime + 0.09,
+          );
+          gain.gain.setValueAtTime(0.001, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.28, ctx.currentTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.22);
+        } catch (err) {}
+      }
+      function spawnSmokeWisp() {
+        const wisp = document.getElementById("smokeWisp");
+        wisp.style.opacity = "0";
+        wisp.animate(
+          [
+            { transform: "translate(-50%, 0) scale(1)", opacity: 0.6 },
+            {
+              transform: "translate(-50%, -40px) scale(2.6)",
+              opacity: 0,
+            },
+          ],
+          { duration: 1400, easing: "ease-out" },
+        );
+        wisp.style.opacity = "0.6";
+        setTimeout(() => (wisp.style.opacity = "0"), 1350);
+      }
       document.getElementById("flame").addEventListener("click", (e) => {
         e.stopPropagation();
         if (flameBlown) return;
         flameBlown = true;
-        document.getElementById("flame").classList.add("blown");
+        const flame = document.getElementById("flame");
+        const candle = document.getElementById("candle");
+        const cakeDim = document.getElementById("cakeDim");
+        const cakeTitle = document.getElementById("cakeTitle");
+        const wishText = document.getElementById("wishText");
         document.getElementById("blowHint").style.opacity = 0;
-        burstConfetti();
-        rainHearts();
-        setTimeout(() => goTo(current + 1), 1400);
+
+        // 1) api bergoyang
+        flame.classList.add("wiggle");
+
+        setTimeout(() => {
+          // 2) api mengecil lalu padam, layar meredup sesaat
+          flame.classList.remove("wiggle");
+          flame.classList.add("dying");
+          cakeDim.classList.add("active");
+          playBlowSound();
+        }, 350);
+
+        setTimeout(() => {
+          // 3) api padam total, asap muncul, lilin turun pelan
+          flame.classList.remove("dying");
+          flame.classList.add("out");
+          spawnSmokeWisp();
+          candle.classList.add("sink");
+          wishText.classList.add("show");
+        }, 650);
+
+        setTimeout(() => {
+          // 4) jeda sebentar, layar terang lagi, lalu konfeti + suara pop
+          cakeDim.classList.remove("active");
+          burstConfetti();
+          playPopSound();
+        }, 1050);
+
+        setTimeout(() => {
+          // 5) love particle menyusul + musik sedikit membesar
+          rainHearts();
+          if (typeof audio !== "undefined" && !audio.paused) {
+            const baseVol = audio.volume;
+            audio.volume = Math.min(1, baseVol + 0.18);
+            setTimeout(() => {
+              audio.volume = baseVol;
+            }, 1600);
+          }
+        }, 1250);
+
+        setTimeout(() => {
+          // 6) kalimat berubah jadi ucapan harapan
+          cakeTitle.classList.add("swap");
+          setTimeout(() => {
+            cakeTitle.innerHTML =
+              "Semoga tahun ini menjadi tahun yang<br />membahagiakan untukmu. ❤️";
+          }, 280);
+        }, 1450);
+
+        setTimeout(() => {
+          // biarkan user yang tap kapan mau lanjut, bukan otomatis
+          const hint = document.getElementById("blowHint");
+          hint.textContent = "ketuk untuk lanjut";
+          hint.style.opacity = 1;
+        }, 2600);
       });
 
       function burstConfetti() {
         const layer = document.getElementById("confettiLayer");
         const colors = ["#e6c78a", "#e6a8bb", "#f6ece1", "#a8455f"];
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 34; i++) {
           const p = document.createElement("div");
           p.className = "confetti-piece";
           p.style.left = Math.random() * 100 + "%";
@@ -1367,7 +1626,7 @@
       function rainHearts() {
         const layer = document.getElementById("confettiLayer");
         const colors = ["#e6a8bb", "#a8455f", "#e6c78a", "#f6ece1"];
-        const count = 26;
+        const count = 13;
         for (let i = 0; i < count; i++) {
           const h = document.createElement("div");
           h.className = "heart-fall-piece";
