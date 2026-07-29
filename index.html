@@ -389,6 +389,20 @@
       }
 
       /* SLIDE 4b : heart photo collage */
+      .heart-stars {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .heart-star-piece {
+        position: absolute;
+        bottom: -20px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
       .heart-wrap {
         position: relative;
         width: min(300px, 78vw);
@@ -795,7 +809,8 @@
 
       <!-- SLIDE 4b : heart photo collage -->
       <div class="slide" data-slide="4b">
-        <div class="eyebrow">Kamu, Dalam Satu Bentuk Hati</div>
+        <div class="heart-stars" id="heartStars"></div>
+        <div class="eyebrow">HAPPY BIRTHDAY 🤍</div>
         <div class="heart-wrap" id="heartWrap"></div>
         <div class="gallery-note"></div>
         <div class="tap-hint">ketuk untuk lanjut</div>
@@ -1012,11 +1027,12 @@
       <div class="slide" data-slide="7" id="closingSlide">
         <div class="closing-big">
           Selamat ulang tahun, sayang.<br />Terima kasih sudah bertahan sejauh
-          ini, terima kasih sudah memperjuangkan kita. Aku mungkin belum bisa
-          selalu berada di sisimu hari ini, tapi aku sedang berjuang agar suatu
-          hari nanti aku bisa berada di sampingmu, bukan hanya saat ulang
-          tahunmu, melainkan di setiap hari setelahnya. <br />Sampai saat itu
-          tiba...<br />Aku akan tetap menunggumu di ujung rindu ini..
+          ini, dan terima kasih sudah tetap percaya pada kita. Aku mungkin belum
+          bisa selalu berada di sisimu hari ini. Tapi aku sedang berjuang agar
+          suatu hari nanti aku tidak lagi hanya hadir lewat layar, melainkan
+          benar-benar ada di sampingmu. Bukan hanya untuk merayakan ulang
+          tahunmu, tetapi untuk menemanimu menjalani hari-hari setelahnya.
+          <br />Sampai hari itu tiba,<br />Aku akan tetap menunggumu. ❤️
           <span class="heart">♥</span>
         </div>
         <button class="replay-btn" id="replayBtn">ulangi dari awal</button>
@@ -1091,6 +1107,11 @@
         slides[current].classList.add("active");
         updateDots();
         if (current === 1) typeGreeting();
+        if (current === 4) {
+          startHeartStars();
+        } else {
+          stopHeartStars();
+        }
       }
       updateDots();
 
@@ -1295,6 +1316,52 @@
           );
           setTimeout(() => p.remove(), duration * 1000 + 400);
         }
+      }
+
+      // bintang berbentuk love, naik dari bawah ke atas di slide hati
+      const heartStarsLayer = document.getElementById("heartStars");
+      let heartStarsInterval = null;
+      function spawnHeartStar() {
+        const s = document.createElement("div");
+        s.className = "heart-star-piece";
+        s.textContent = "♥";
+        const size = 8 + Math.random() * 12;
+        const colors = ["#e6a8bb", "#f6ece1", "#e6c78a", "#a8455f"];
+        s.style.left = Math.random() * 100 + "%";
+        s.style.fontSize = size + "px";
+        s.style.color = colors[Math.floor(Math.random() * colors.length)];
+        s.style.filter = `drop-shadow(0 0 4px ${colors[Math.floor(Math.random() * colors.length)]})`;
+        heartStarsLayer.appendChild(s);
+        const duration = 4 + Math.random() * 3;
+        const drift = (Math.random() - 0.5) * 60;
+        s.animate(
+          [
+            { transform: `translate(0, 0) rotate(0deg)`, opacity: 0 },
+            {
+              transform: `translate(${drift * 0.4}px, -40vh) rotate(${(Math.random() - 0.5) * 40}deg)`,
+              opacity: 1,
+              offset: 0.15,
+            },
+            {
+              transform: `translate(${drift}px, -100vh) rotate(${(Math.random() - 0.5) * 80}deg)`,
+              opacity: 0,
+            },
+          ],
+          { duration: duration * 1000, easing: "ease-out" },
+        );
+        setTimeout(() => s.remove(), duration * 1000 + 200);
+      }
+      function startHeartStars() {
+        if (heartStarsInterval) return;
+        for (let i = 0; i < 4; i++) {
+          setTimeout(() => spawnHeartStar(), i * 260);
+        }
+        heartStarsInterval = setInterval(spawnHeartStar, 420);
+      }
+      function stopHeartStars() {
+        clearInterval(heartStarsInterval);
+        heartStarsInterval = null;
+        heartStarsLayer.innerHTML = "";
       }
 
       function rainHearts() {
