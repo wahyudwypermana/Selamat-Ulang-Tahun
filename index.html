@@ -1029,35 +1029,36 @@
       let current = 0;
 
       // coba beberapa ekstensi (jpg/JPG/jpeg/png dst) supaya tidak masalah huruf besar-kecil
-      function imgWithFallback(basePath, fallbackHtml) {
-        const exts = [
-          "jpg",
-          "JPG",
-          "jpeg",
-          "JPEG",
-          "png",
-          "PNG",
-          "webp",
-          "WEBP",
-          "gif",
-          "GIF",
-          "jfif",
-          "JFIF",
-          "avif",
-          "AVIF",
-        ];
-        let attempt = 0;
-        function tryNext(imgEl) {
-          attempt++;
-          if (attempt >= exts.length) {
-            imgEl.style.display = "none";
+      const IMG_EXTS = [
+        "jpg",
+        "JPG",
+        "jpeg",
+        "JPEG",
+        "png",
+        "PNG",
+        "webp",
+        "WEBP",
+        "gif",
+        "GIF",
+        "jfif",
+        "JFIF",
+        "avif",
+        "AVIF",
+      ];
+      window.__imgFallbackTryNext = function (imgEl) {
+        let attempt = parseInt(imgEl.dataset.attempt || "0", 10) + 1;
+        imgEl.dataset.attempt = attempt;
+        if (attempt >= IMG_EXTS.length) {
+          imgEl.style.display = "none";
+          if (imgEl.nextElementSibling) {
             imgEl.nextElementSibling.style.display = "flex";
-            return;
           }
-          imgEl.src = `${basePath}.${exts[attempt]}`;
+          return;
         }
-        window.__imgFallbackTryNext = window.__imgFallbackTryNext || tryNext;
-        return `<img src="${basePath}.${exts[0]}" onerror="window.__imgFallbackTryNext(this)">${fallbackHtml}`;
+        imgEl.src = `${imgEl.dataset.base}.${IMG_EXTS[attempt]}`;
+      };
+      function imgWithFallback(basePath, fallbackHtml) {
+        return `<img data-base="${basePath}" data-attempt="0" src="${basePath}.${IMG_EXTS[0]}" onerror="window.__imgFallbackTryNext(this)">${fallbackHtml}`;
       }
 
       // bintang
