@@ -1617,6 +1617,7 @@
 
       function playShhSound() {
         try {
+          duckMusicFor(650);
           const ctx = getAudioCtx();
           const bufferSize = ctx.sampleRate * 0.5;
           const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -1641,6 +1642,7 @@
       }
       function playEnvelopeSound() {
         try {
+          duckMusicFor(550);
           const ctx = getAudioCtx();
           const bufferSize = ctx.sampleRate * 0.35;
           const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -1825,6 +1827,7 @@
       }
       function playArrivalPing() {
         try {
+          duckMusicFor(800);
           const ctx = getAudioCtx();
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -1844,6 +1847,7 @@
 
       function playSoftTing() {
         try {
+          duckMusicFor(1200);
           const ctx = getAudioCtx();
           const now = ctx.currentTime;
           [
@@ -2114,6 +2118,23 @@
         if (audioCtx.state === "suspended") audioCtx.resume();
         return audioCtx;
       }
+
+      // musik otomatis dikecilkan sesaat setiap kali ada efek suara animasi,
+      // lalu kembali normal begitu efek suaranya selesai
+      const musicBaseVolume = 0.55;
+      const musicDuckVolume = 0.18;
+      let duckRestoreTimer = null;
+      let duckDepth = 0;
+      function duckMusicFor(ms) {
+        if (typeof audio === "undefined" || !audio) return;
+        duckDepth++;
+        audio.volume = musicDuckVolume;
+        clearTimeout(duckRestoreTimer);
+        duckRestoreTimer = setTimeout(() => {
+          duckDepth = 0;
+          audio.volume = musicBaseVolume;
+        }, ms);
+      }
       function playBlowSound() {
         try {
           const ctx = getAudioCtx();
@@ -2368,7 +2389,7 @@
 
       // musik
       const audio = document.getElementById("audioPlayer");
-      audio.volume = 0.55;
+      audio.volume = musicBaseVolume;
       const musicBtn = document.getElementById("musicToggle");
       let musicStarted = false;
       musicBtn.addEventListener("click", (e) => {
