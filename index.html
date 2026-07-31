@@ -2368,6 +2368,7 @@
 
       // musik
       const audio = document.getElementById("audioPlayer");
+      audio.volume = 0.55;
       const musicBtn = document.getElementById("musicToggle");
       let musicStarted = false;
       musicBtn.addEventListener("click", (e) => {
@@ -2380,7 +2381,7 @@
             })
             .catch(() => {
               alert(
-                "Belum Ada file lagu.mp3 di folder images/. Taruh file musikmu dulu, lalu coba lagi.",
+                "Belum ada file lagu.mp3 di folder images/. Taruh file musikmu dulu, lalu coba lagi.",
               );
             });
         } else {
